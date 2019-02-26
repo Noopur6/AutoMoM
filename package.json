@@ -1,0 +1,18 @@
+{
+  "name": "auto_mom_backend",
+  "version": "1.0.0",
+  "description": "Backend for Auto MoM project using NodeJs and MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bantai Bacchi Bamai",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.1",
+    "mongoose": "^5.4.15",
+    "nodemon": "^1.18.10"
+  }
+}
