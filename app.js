@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const authRoute = require('./routes/AuthRoute');
 const profileRoute = require('./routes/profilesRoute');
+const meetingRoute=require('./routes/MeetingRoute');
 
 require('./models/db');
 require('./config/passport')
@@ -19,6 +20,7 @@ app.use(passport.initialize());
 //services
 app.use('/api',authRoute);
 app.use('/profiles', profileRoute);
+app.use('/me',meetingRoute)
 
 //catch unauthorised acces
 app.use((err, req, res, next) => {
