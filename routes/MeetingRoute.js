@@ -8,4 +8,5 @@ const auth = jwt({
     userProperty: 'payload'
 })
 router.post('/meetingRequest',auth,meetingController.meetingRequest);
+router.post('/meetingList',auth,meetingController.meetingList);
 module.exports = router;
