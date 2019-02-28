@@ -5,7 +5,7 @@ var dbURI = 'mongodb://localhost/auto_mom';
 if (process.env.NODE_ENV === 'production') {
   dbURI = process.env.MONGOLAB_URI;
 }
-
+mongoose.set('useCreateIndex', true);
 mongoose.connect(dbURI, { useNewUrlParser: true });
 
 // CONNECTION EVENTS
