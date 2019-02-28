@@ -4,11 +4,15 @@ const passport = require('passport');
 const authRoute = require('./routes/AuthRoute');
 const profileRoute = require('./routes/profilesRoute');
 const meetingRoute=require('./routes/MeetingRoute');
+const cors = require('cors');
 
 require('./models/db');
 require('./config/passport')
 
 const app = express();
+
+//use cors middleware
+app.use(cors());
 
 //bodyParser middleware
 app.use(bodyParser.json());
