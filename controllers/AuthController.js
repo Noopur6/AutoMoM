@@ -1,5 +1,5 @@
-var passport = require('passport');
-var User = require('../models/User');
+const passport = require('passport');
+const User = require('../models/User');
 const { validationResult } = require('express-validator/check');
 
 module.exports.register = (req, res) => {

@@ -1,6 +1,6 @@
-var passport = require('passport');
-var mongoose = require('mongoose');
-var MeetingRequest = require('../models/MeetingRequest');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const MeetingRequest = require('../models/MeetingRequest');
 
 module.exports.meetingRequest= (req,res)=> {
     let meetRequest = new MeetingRequest();
@@ -9,6 +9,7 @@ module.exports.meetingRequest= (req,res)=> {
     meetRequest.participantEmail = req.body.participantEmail;
     meetRequest.dateTime = req.body.dateTime;
     meetRequest.agenda = req.body.agenda;
+    meetRequest.status="y";
 
     meetRequest.save(function(err) {
         if (err){
@@ -43,4 +44,22 @@ module.exports.meetingList= (req,res)=> {
             res.send(meetings);
         }
     });
+}
+
+//cancel meeting
+module.exports.cancelMeeting= function(req,res) {
+    
+        //let email = req.body.email;
+        let id=req.body.id;
+        MeetingRequest.update({'_id':id},{'$set':{'status':'cancelled'}},function(err,meetingRequest){
+            if (err) {
+                console.log(err);
+                res.send({
+                    error: "No data found"
+                });
+            }
+            else{
+                res.send({message: 'Meeting cancelled'});
+            }        
+        })
 }
