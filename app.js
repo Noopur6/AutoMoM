@@ -20,7 +20,7 @@ app.use(passport.initialize());
 //services
 app.use('/api',authRoute);
 app.use('/profiles', profileRoute);
-app.use('/me',meetingRoute)
+app.use('/meeting',meetingRoute)
 
 //catch unauthorised acces
 app.use((err, req, res, next) => {
