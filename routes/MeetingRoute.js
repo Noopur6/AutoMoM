@@ -13,4 +13,5 @@ router.post('/',auth,meetingController.meetingRequest);
 router.post('/list',[
     check('email',"email is required").exists()
 ],auth,meetingController.meetingList);
+router.post('/cancel',meetingController.cancelMeeting);
 module.exports = router;
