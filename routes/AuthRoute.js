@@ -18,6 +18,10 @@ router.post('/register', [
     ] 
     ,authController.register);
 
-router.post('/login', authController.login);
+router.post('/login',[
+        check('email', "Email is required").exists(),
+        check('email', "Invalid Email").isEmail(),
+        check('password', "Password is required").exists()
+    ], authController.login);
 
 module.exports = router;

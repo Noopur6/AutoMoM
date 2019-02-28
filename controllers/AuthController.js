@@ -1,5 +1,4 @@
 var passport = require('passport');
-var mongoose = require('mongoose');
 var User = require('../models/User');
 const { validationResult } = require('express-validator/check');
 
@@ -20,15 +19,17 @@ module.exports.register = (req, res) => {
     user.setPassword(req.body.password);
 
     user.save(function(err) {
-        if (err.code == 11000){
-            res.send({
-                error: "User already exists"
-            });
-        }
-        else if (err){
-            res.send({
-                error: "Some error occured"
-            });
+        if (err){
+            if (err.code == 11000){
+                res.send({
+                    error: "User already exists"
+                });
+            }
+            else{
+                res.send({
+                    error: "Some error occured"
+                });
+            }
         }
         else {
             let token;
@@ -41,6 +42,14 @@ module.exports.register = (req, res) => {
 }
 
 module.exports.login = (req, res) => {
+
+    //check validation erros
+    const errors = validationResult(req);
+    
+    if (!errors.isEmpty()) {
+        return res.send({error: errors.array()});
+    }
+
     passport.authenticate('local', function(err, user, info) {
         let token;
 
