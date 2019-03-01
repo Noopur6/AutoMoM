@@ -1,6 +1,6 @@
-const passport = require('passport');
-const mongoose = require('mongoose');
-const MeetingRequest = require('../models/MeetingRequest');
+var passport = require('passport');
+var mongoose = require('mongoose');
+var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
 
 module.exports.meetingRequest= (req,res)=> {
@@ -33,16 +33,26 @@ module.exports.meetingRequest= (req,res)=> {
 
 module.exports.meetingList= (req,res)=> {
 
+    const errors = validationResult(req);
+    let flag = errors.isEmpty();
+    if(!flag){
+        return res.send({error: errors.array()});
+    }
     let email = req.body.email;
     MeetingRequest.find({
         $or: [
             {organizerEmail: email},
             {participantEmail: {$elemMatch:{$eq: email}}}
-        ]}, {'organizerEmail':1, "agenda":1, "participantEmail":1, _id:0 }, function(err, meetings) {
+        ]}, {'organizerEmail':1, "agenda":1, "participantEmail":1 }, function(err, meetings) {
         if (err){
             console.log(err);
             res.send({
-                message: "Error"
+                message: "Some Error occurred"
+            });
+        }
+        else if(meetings.length==0){
+            res.send({
+                message: "There are no meetings for this user."
             });
         }
         else {

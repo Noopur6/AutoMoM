@@ -17,10 +17,12 @@ router.post('/',[
     check('status','Status is required').exists()  
 ],meetingController.meetingRequest);
 
-router.post('/list',auth,meetingController.meetingList);
-
 router.post('/cancel',[
     check('id','Id is required').exists()
 ],auth,meetingController.cancelMeeting);
 
+router.post('/',auth,meetingController.meetingRequest);
+router.post('/list',[
+    check('email',"email is required").exists()
+],auth,meetingController.meetingList);
 module.exports = router;
