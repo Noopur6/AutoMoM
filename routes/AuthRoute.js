@@ -11,7 +11,8 @@ const auth = jwt({
 
 router.post('/register', [
         check('email', "Email is required").exists(),
-        check('name', "Name is required").exists(), 
+        check('firstName', "First Name is required").exists(), 
+        check('lastName', "Last Name is required").exists(), 
         check('password', "Password is required").exists(),
         check('email', "Invalid Email").isEmail(),
         check('password', "Password should be alphanumeric").isAlphanumeric()
