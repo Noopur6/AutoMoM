@@ -12,9 +12,10 @@ console.log("in meeting req");
 router.post('/',[
     check('organizerEmail','Valid email is required').exists().isEmail(),
     check('participantEmail','Valid email is required').exists().isEmail(),
-    check('dateTime','dateTime is required').exists(),
-    check('agenda','Agenda is required').exists(),
-    check('status','Status is required').exists()  
+    check('startDateTime','Start Date is required').exists(),
+    check('endDateTime','End Date is required').exists(),
+    check('location','location is required').exists(),
+    check('agenda','Agenda is required').exists(), 
 ],meetingController.meetingRequest);
 
 router.post('/cancel',[

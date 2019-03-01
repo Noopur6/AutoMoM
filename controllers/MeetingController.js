@@ -13,7 +13,9 @@ module.exports.meetingRequest= (req,res)=> {
     let meetRequest = new MeetingRequest();
     meetRequest.organizerEmail = req.body.organizerEmail;
     meetRequest.participantEmail = req.body.participantEmail;
-    meetRequest.dateTime = req.body.dateTime;
+    meetRequest.startDateTime = req.body.startDateTime;
+    meetRequest.endDateTime = req.body.endDateTime;
+    meetRequest.location = req.body.location;
     meetRequest.agenda = req.body.agenda;
     meetRequest.status="y";
 
@@ -43,7 +45,7 @@ module.exports.meetingRequest= (req,res)=> {
                     console.log(error);
                 }else{
                     console.log('Message sent: ' + info.response);
-                };
+                }
             });
         }
     });

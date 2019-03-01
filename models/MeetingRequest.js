@@ -11,8 +11,16 @@ let meetingRequestSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    dateTime: {
+    startDateTime: {
         type: Date,
+        required: true
+    },
+    endDateTime: {
+        type: Date,
+        required: true
+    },
+    location: {
+        type: String,
         required: true
     },
     agenda: {
@@ -21,7 +29,6 @@ let meetingRequestSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: true
     },
 });
 
