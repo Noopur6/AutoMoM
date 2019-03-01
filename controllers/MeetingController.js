@@ -2,6 +2,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
+const transporter = require('../config/mail_config');
 
 module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
@@ -25,7 +26,23 @@ module.exports.meetingRequest= (req,res)=> {
         }
         else {
             res.send({
-                message: "meeting has been generated"
+                message: "Meeting has been generated"
+            });
+
+            //send email to organiser and participant
+            let mailOptions = {
+                from: 'notification.automom@gmail.com', // sender address
+                to: meetRequest.participantEmail, // list of participant
+                cc: meetRequest.organizerEmail, //organiser email
+                subject: 'Automom: Meeting has been created', // Subject line
+                html: "Hey,<br><br>You are invited to join the meeting on <b>"+meetRequest.dateTime+"</b> by "+meetRequest.organizerEmail+". Please login to AutoMoM to know more. <br><br>Thanks,<br>Team AutoMoM." //, // plaintext body
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log('Message sent: ' + info.response);
+                };
             });
         }
     });
@@ -78,6 +95,22 @@ module.exports.cancelMeeting= function(req,res) {
             }
             else{
                 res.send({message: 'Meeting cancelled'});
+
+                //send email to organiser and participant
+                let mailOptions = {
+                    from: 'notification.automom@gmail.com', // sender address
+                    to: meetRequest.participantEmail, // list of participant
+                    cc: meetRequest.organizerEmail, //organiser email
+                    subject: 'Automom: Meeting has been cancelled', // Subject line
+                    html: "Hey,<br><br>You meeting on <b>"+meetRequest.dateTime+"</b> organised by "+meetRequest.organizerEmail+" has been cancelled. <br><br>Thanks,<br>Team AutoMoM."
+                };
+                transporter.sendMail(mailOptions, function(error, info){
+                    if(error){
+                        console.log(error);
+                    }else{
+                        console.log('Message sent: ' + info.response);
+                    };
+                });
             }        
         })
 }
