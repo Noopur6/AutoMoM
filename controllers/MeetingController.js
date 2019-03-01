@@ -1,8 +1,7 @@
-var passport = require('passport');
-var mongoose = require('mongoose');
 var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
 const transporter = require('../config/mail_config');
+var validations = require('../utils/CommonUtility')
 
 module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
@@ -93,7 +92,7 @@ module.exports.cancelMeeting= function(req,res) {
             if (err) {
                 console.log(err);
                 res.send({
-                    error: "No meeting found"
+                    error: "There are no meetings for this user."
                 });
             }
             else{
@@ -121,13 +120,13 @@ module.exports.cancelMeeting= function(req,res) {
 }
 
 //cancel meeting
-module.exports.updateMeeting= function(req,res) {
+module.exports.updateMeeting = function(req,res) {
     
     MeetingRequest.findOneAndUpdate(req.body.id,req.body,function(err){
         if (err) {
             console.log(err);
             res.send({
-                error: "No meeting found."
+                error: "There are no meetings for this user."
             });
         }
         else{
@@ -135,4 +134,3 @@ module.exports.updateMeeting= function(req,res) {
         }        
     })
 }
-

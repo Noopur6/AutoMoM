@@ -26,8 +26,5 @@ router.post('/',auth,meetingController.meetingRequest);
 router.post('/list',[
     check('email',"email is required").exists()
 ],auth,meetingController.meetingList);
-router.post('/cancel',meetingController.cancelMeeting);
-router.put('/update',[
-    check('organizerEmail',"Organizer email should not be given.")
-],meetingController.updateMeeting);
+router.put('/update',meetingController.updateMeeting);
 module.exports = router;
