@@ -99,21 +99,21 @@ module.exports.cancelMeeting= function(req,res) {
 
                 //send email to organiser and participant
                 //let formattedDateTime = meetRequest.dateTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-                let mailOptions = {
-                    from: 'notification.automom@gmail.com', // sender address
-                    to: meetRequest.participantEmail, // list of participant
-                    cc: meetRequest.organizerEmail, //organiser email
-                    subject: 'Automom: Meeting has been cancelled', // Subject line
-                    html: "Hey,<br><br>You meeting organised by "+meetRequest.organizerEmail+" has been cancelled. <br><br>Thanks,<br>Team AutoMoM."
-                    //html: "Hey,<br><br>You meeting on <b>"+formattedDateTime+"</b> organised by "+meetRequest.organizerEmail+" has been cancelled. <br><br>Thanks,<br>Team AutoMoM."
-                };
-                transporter.sendMail(mailOptions, function(error, info){
-                    if(error){
-                        console.log(error);
-                    }else{
-                        console.log('Message sent: ' + info.response);
-                    };
-                });
+                // let mailOptions = {
+                //     from: 'notification.automom@gmail.com', // sender address
+                //     to: meetRequest.participantEmail, // list of participant
+                //     cc: meetRequest.organizerEmail, //organiser email
+                //     subject: 'Automom: Meeting has been cancelled', // Subject line
+                //     html: "Hey,<br><br>You meeting organised by "+meetRequest.organizerEmail+" has been cancelled. <br><br>Thanks,<br>Team AutoMoM."
+                //     //html: "Hey,<br><br>You meeting on <b>"+formattedDateTime+"</b> organised by "+meetRequest.organizerEmail+" has been cancelled. <br><br>Thanks,<br>Team AutoMoM."
+                // };
+                // transporter.sendMail(mailOptions, function(error, info){
+                //     if(error){
+                //         console.log(error);
+                //     }else{
+                //         console.log('Message sent: ' + info.response);
+                //     };
+                // });
             }        
         })
 }
