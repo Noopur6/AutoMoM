@@ -1,10 +1,15 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
 const MeetingRequest = require('../models/MeetingRequest');
+const { validationResult } = require('express-validator/check');
 
 module.exports.meetingRequest= (req,res)=> {
+    const errors=validationResult(req);
+    let flag=errors.isEmpty();
+    if(!flag){
+        return res.send({error: errors.array()});
+    }
     let meetRequest = new MeetingRequest();
-    
     meetRequest.organizerEmail = req.body.organizerEmail;
     meetRequest.participantEmail = req.body.participantEmail;
     meetRequest.dateTime = req.body.dateTime;
@@ -48,14 +53,17 @@ module.exports.meetingList= (req,res)=> {
 
 //cancel meeting
 module.exports.cancelMeeting= function(req,res) {
-    
-        //let email = req.body.email;
+        const errors=validationResult(req);
+        let flag=errors.isEmpty();
+        if(!flag){
+          return res.send({error:errros.array()});
+        }
         let id=req.body.id;
         MeetingRequest.update({'_id':id},{'$set':{'status':'cancelled'}},function(err,meetingRequest){
             if (err) {
                 console.log(err);
                 res.send({
-                    error: "No data found"
+                    error: "No meeting found"
                 });
             }
             else{

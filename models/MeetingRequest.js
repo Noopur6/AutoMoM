@@ -5,12 +5,10 @@ const jwt = require('jsonwebtoken');
 let meetingRequestSchema = new mongoose.Schema({
     organizerEmail:{
         type: String,
-        unique: true,
         required: true
     },
     participantEmail: {
         type: [String],
-        unique: true,
         required: true
     },
     dateTime: {
