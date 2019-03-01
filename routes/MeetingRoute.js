@@ -8,7 +8,7 @@ const auth = jwt({
     secret: 'MY_SECRET',
     userProperty: 'payload'
 })
-console.log("in meeting req");
+
 router.post('/',[
     check('organizerEmail','Valid email is required').exists().isEmail(),
     check('participantEmail','Valid email is required').exists().isEmail(),
@@ -26,4 +26,8 @@ router.post('/',auth,meetingController.meetingRequest);
 router.post('/list',[
     check('email',"email is required").exists()
 ],auth,meetingController.meetingList);
+router.post('/cancel',meetingController.cancelMeeting);
+router.put('/update',[
+    check('organizerEmail',"Organizer email should not be given.")
+],meetingController.updateMeeting);
 module.exports = router;

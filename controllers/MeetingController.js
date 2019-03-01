@@ -63,7 +63,7 @@ module.exports.meetingList= (req,res)=> {
         $or: [
             {organizerEmail: email},
             {participantEmail: {$elemMatch:{$eq: email}}}
-        ]}, {'organizerEmail':1, "agenda":1, "participantEmail":1 }, function(err, meetings) {
+        ]}, function(err, meetings) {
         if (err){
             console.log(err);
             res.send({
@@ -119,3 +119,20 @@ module.exports.cancelMeeting= function(req,res) {
             }        
         })
 }
+
+//cancel meeting
+module.exports.updateMeeting= function(req,res) {
+    
+    MeetingRequest.findOneAndUpdate(req.body.id,req.body,function(err){
+        if (err) {
+            console.log(err);
+            res.send({
+                error: "No meeting found."
+            });
+        }
+        else{
+            res.send({message: 'Success'});
+        }        
+    })
+}
+
