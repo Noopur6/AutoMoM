@@ -1,7 +1,6 @@
 var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
 const transporter = require('../config/mail_config');
-var validations = require('../utils/CommonUtility')
 
 module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
