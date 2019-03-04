@@ -87,7 +87,7 @@ module.exports.cancelMeeting= function(req,res) {
           return res.send({error:errros.array()});
         }
         let id=req.body.id;
-        MeetingRequest.update({'_id':id},{'$set':{'status':'cancelled'}},function(err,meetingRequest){
+        MeetingRequest.update({'_id':id},{'$set':{'status':'n'}},function(err,meetingRequest){
             if (err) {
                 console.log(err);
                 res.send({
