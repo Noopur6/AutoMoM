@@ -121,14 +121,14 @@ module.exports.cancelMeeting= function(req,res) {
 //cancel meeting
 module.exports.updateMeeting = function(req,res) {
 
-    const errors=validationResult(req);
-    let flag=errors.isEmpty();
+    const errors = validationResult(req);
+    let flag = errors.isEmpty();
     if(!flag){
-      return res.send({error:errros.array({ onlyFirstError: true })});
+        return res.send({error: errors.array({ onlyFirstError: true })});
     }
     let id=req.body.id;
 
-    MeetingRequest.findOneAndUpdate(id,req.body,{ReturnNewDocument: true},function(err, meeting){
+    MeetingRequest.findOneAndUpdate({_id: {$eq: id}},req.body,{ returnNewDocument: true },function(err, meeting){
         if (err) {
             console.log(err);
             res.send({

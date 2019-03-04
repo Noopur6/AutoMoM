@@ -34,7 +34,8 @@ router.post('/list', [
 ], auth, meetingController.meetingList);
 
 router.put('/update', [
-    check('id', 'Id is required').exists()
+    check('id', 'Id is required').exists(),
+    check('id', 'Invalid id').isMongoId()
 ], auth, meetingController.updateMeeting);
 
 module.exports = router;
