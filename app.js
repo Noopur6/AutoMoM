@@ -8,9 +8,7 @@ const cors = require('cors');
 
 require('./models/db');
 require('./config/passport')
-
 const app = express();
-
 //use cors middleware
 app.use(cors());
 
