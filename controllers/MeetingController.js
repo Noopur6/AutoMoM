@@ -6,7 +6,7 @@ module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
     let flag=errors.isEmpty();
     if(!flag){
-        return res.send({error: errors.array()});
+        return res.send({error: errors.array({ onlyFirstError: true })});
     }
     let meetRequest = new MeetingRequest();
     meetRequest.organizerEmail = req.body.organizerEmail;
@@ -54,7 +54,7 @@ module.exports.meetingList= (req,res)=> {
     const errors = validationResult(req);
     let flag = errors.isEmpty();
     if(!flag){
-        return res.send({error: errors.array()});
+        return res.send({error: errors.array({ onlyFirstError: true })});
     }
     let email = req.body.email;
     MeetingRequest.find({
@@ -84,7 +84,7 @@ module.exports.cancelMeeting= function(req,res) {
         const errors=validationResult(req);
         let flag=errors.isEmpty();
         if(!flag){
-          return res.send({error:errros.array()});
+          return res.send({error:errros.array({ onlyFirstError: true })});
         }
         let id=req.body.id;
         MeetingRequest.update({'_id':id},{'$set':{'status':'n'}},function(err,meetingRequest){
@@ -120,8 +120,15 @@ module.exports.cancelMeeting= function(req,res) {
 
 //cancel meeting
 module.exports.updateMeeting = function(req,res) {
-    
-    MeetingRequest.findOneAndUpdate(req.body.id,req.body,function(err, meeting){
+
+    const errors=validationResult(req);
+    let flag=errors.isEmpty();
+    if(!flag){
+      return res.send({error:errros.array({ onlyFirstError: true })});
+    }
+    let id=req.body.id;
+
+    MeetingRequest.findOneAndUpdate(id,req.body,{ReturnNewDocument: true},function(err, meeting){
         if (err) {
             console.log(err);
             res.send({
@@ -142,7 +149,7 @@ module.exports.updateMeeting = function(req,res) {
             };
             transporter.sendMail(mailOptions, function(error, info){
                 if(error){
-                    console.log(error);
+                    console.log('Email Error: '+error);
                 }else{
                     console.log('Message sent: ' + info.response);
                 }
