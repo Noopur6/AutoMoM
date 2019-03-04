@@ -30,7 +30,7 @@ module.exports.meetingRequest= (req,res)=> {
             });
 
             //send email to organiser and participant
-            let formattedDateTime = meetRequest.dateTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            let formattedDateTime = meetRequest.startDateTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
             let mailOptions = {
                 from: 'notification.automom@gmail.com', // sender address
                 to: meetRequest.participantEmail, // list of participant
@@ -121,7 +121,7 @@ module.exports.cancelMeeting= function(req,res) {
 //cancel meeting
 module.exports.updateMeeting = function(req,res) {
     
-    MeetingRequest.findOneAndUpdate(req.body.id,req.body,function(err){
+    MeetingRequest.findOneAndUpdate(req.body.id,req.body,function(err, meeting){
         if (err) {
             console.log(err);
             res.send({
@@ -130,6 +130,23 @@ module.exports.updateMeeting = function(req,res) {
         }
         else{
             res.send({message: 'Success'});
+
+            //send email to organiser and participant
+            let formattedDateTime = meeting.startDateTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            let mailOptions = {
+                from: 'notification.automom@gmail.com', // sender address
+                to: meeting.participantEmail, // list of participant
+                cc: meeting.organizerEmail, //organiser email
+                subject: 'Automom: Meeting has been created', // Subject line
+                html: "Hey,<br><br>You are invited to join the meeting on <b>"+formattedDateTime+"</b> by "+meeting.organizerEmail+". Please login to AutoMoM to know more. <br><br>Thanks,<br>Team AutoMoM." //, // plaintext body
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log('Message sent: ' + info.response);
+                }
+            });
         }        
     })
 }
