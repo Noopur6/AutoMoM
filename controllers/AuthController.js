@@ -5,11 +5,12 @@ const { validationResult } = require('express-validator/check');
 module.exports.register = (req, res) => {
     
     //check validation erros
-    const errors = validationResult(req);
+    let errors = validationResult(req);
+    //errors.useFirstErrorOnly().array();
     let flag = errors.isEmpty();
     
     if (!flag) {
-        return res.send({error: errors.array()});
+        return res.send({error: errors.array({ onlyFirstError: true })});
     }
 
     let user = new User();
@@ -48,7 +49,7 @@ module.exports.login = (req, res) => {
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
-        return res.send({error: errors.array()});
+        return res.send({error: errors.array({ onlyFirstError: true })});
     }
 
     passport.authenticate('local', function(err, user, info) {
