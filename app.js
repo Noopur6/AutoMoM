@@ -4,6 +4,7 @@ const passport = require('passport');
 const authRoute = require('./routes/AuthRoute');
 const profileRoute = require('./routes/profilesRoute');
 const meetingRoute=require('./routes/MeetingRoute');
+const roomRoute=require('./routes/VirtualRoomRoute');
 const cors = require('cors');
 
 require('./models/db');
@@ -22,7 +23,8 @@ app.use(passport.initialize());
 //services
 app.use('/api',authRoute);
 app.use('/profiles', profileRoute);
-app.use('/meeting',meetingRoute)
+app.use('/meeting',meetingRoute);
+app.use('/virtualRoom', roomRoute);
 
 //catch unauthorised acces
 app.use((err, req, res, next) => {

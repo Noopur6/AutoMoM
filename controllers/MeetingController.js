@@ -126,13 +126,12 @@ module.exports.updateMeeting = function(req,res) {
     if(!flag){
         return res.send({error: errors.array({ onlyFirstError: true })});
     }
-    let id=req.body.id;
 
-    MeetingRequest.findOneAndUpdate({_id: {$eq: id}},req.body,{ returnNewDocument: true },function(err, meeting){
+    MeetingRequest.findOneAndUpdate({_id: {$eq: req.body.id}},req.body,{ returnNewDocument: true },function(err, meeting){
         if (err) {
             console.log(err);
             res.send({
-                error: "There are no meetings for this user."
+                error: "No meeting found by this Id"
             });
         }
         else{
@@ -144,7 +143,7 @@ module.exports.updateMeeting = function(req,res) {
                 from: 'notification.automom@gmail.com', // sender address
                 to: meeting.participantEmail, // list of participant
                 cc: meeting.organizerEmail, //organiser email
-                subject: 'Automom: Meeting has been created', // Subject line
+                subject: 'Automom: Meeting has been updated', // Subject line
                 html: "Hey,<br><br>You are invited to join the meeting on <b>"+formattedDateTime+"</b> by "+meeting.organizerEmail+". Please login to AutoMoM to know more. <br><br>Thanks,<br>Team AutoMoM." //, // plaintext body
             };
             transporter.sendMail(mailOptions, function(error, info){

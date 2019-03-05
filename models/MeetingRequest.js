@@ -30,6 +30,12 @@ let meetingRequestSchema = new mongoose.Schema({
     status: {
         type: String,
     },
+    token: {
+        type: String
+    },
+    meetingData: {
+        type: String
+    }
 });
 
 module.exports = mongoose.model('MeetingRequest', meetingRequestSchema);
