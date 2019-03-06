@@ -1,6 +1,6 @@
 var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
-const transporter = require('../config/mail_config');
+var commonUtility = require('../utility/CommonUtility');
 
 module.exports.createVirtualRoom = (req,res) => {
     const errors = validationResult(req);
@@ -10,27 +10,16 @@ module.exports.createVirtualRoom = (req,res) => {
     }
     let tokenFromClient = req.body.token;
     MeetingRequest.findOneAndUpdate({_id:req.body.id},{$set:{token:tokenFromClient}},{ returnNewDocument: true },
-        function (err, meeting) {console.log(err);
+        function (err, meeting) {
             if(err){
                 res.send({error:"No meeting found by this Id"});
             }
             else{
                 res.send({message:"success"});
                 //send email to organiser and participant
-                let mailOptions = {
-                    from: 'notification.automom@gmail.com', // sender address
-                    to: [meeting.participantEmail, meeting.organizerEmail], // list of participant
-                    subject: 'Automom: Token for the meeting', // Subject line
-                    html: "Hey,<br><br>Please login to AutoMoM and enter below token to join the meeting. "+
-                    "<br><br><h3>"+tokenFromClient+"</h3><br><br>Thanks,<br>Team AutoMoM" //, // plaintext body
-                };
-                transporter.sendMail(mailOptions, function(error, info){
-                    if(error){
-                        console.log('Email Error: '+error);
-                    }else{
-                        console.log('Message sent: ' + info.response);
-                    }
-                });
+                commonUtility.sendMail( [meeting.participantEmail, meeting.organizerEmail], null,
+                    'Automom: Token for the meeting', "Hey,<br><br>Please login to AutoMoM and enter below token to join the meeting. "+
+                    "<br><br><h3>"+tokenFromClient+"</h3><br><br>Thanks,<br>Team AutoMoM");
             }
         });
 }

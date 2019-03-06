@@ -11,12 +11,16 @@ let meetingRequestSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    startDateTime: {
-        type: Date,
+    meetingDate: {
+        type: String,
         required: true
     },
-    endDateTime: {
-        type: Date,
+    startTime: {
+        type: String,
+        required: true
+    },
+    endTime: {
+        type: String,
         required: true
     },
     location: {
