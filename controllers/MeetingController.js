@@ -22,7 +22,11 @@ module.exports.meetingRequest= (req,res)=> {
         if (err){
             console.log(err);
             res.send({
-                message: "Error"
+                error: [
+                    {
+                        msg: "Error"
+                    }
+                ]
             });
         }
         else {
@@ -53,12 +57,20 @@ module.exports.meetingList= (req,res)=> {
         if (err){
             console.log(err);
             res.send({
-                message: "Some Error occurred"
+                error: [
+                    {
+                        msg: "Some error occured."
+                    }
+                ]
             });
         }
         else if(meetings.length==0){
             res.send({
-                message: "There are no meetings for this user."
+                error: [
+                    {
+                        msg: "There are no meetings for this user."
+                    }
+                ]
             });
         }
         else {
@@ -87,7 +99,11 @@ module.exports.updateMeeting = function(req,res) {
         if (err) {
             console.log(err);
             res.send({
-                error: "No meeting found by this Id"
+                error: [
+                    {
+                        msg: "No meeting found by this Id."
+                    }
+                ]
             });
         }
         else{
