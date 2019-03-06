@@ -10,7 +10,7 @@ const auth = jwt({
 })
 
 router.post('/register', [
-        check('email', "Email is required").exists(),
+        check('email', "Email is required").exists().not().isEmpty(),
         check('firstName', "First Name is required").exists(), 
         check('firstName', "First Name can contain alphabates only").isAlpha(), 
         check('lastName', "Last Name is required").isAlpha(), 
@@ -22,7 +22,7 @@ router.post('/register', [
     ,authController.register);
 
 router.post('/login',[
-        check('email', "Email is required").exists(),
+        check('email', "Email is required").exists().not().isEmpty(),
         check('email', "Invalid Email").isEmail(),
         check('password', "Password is required").exists(),
         check("password", "Password should be combination of one uppercase , one lower case, one special char, one digit and min 8 , max 20 char long").exists().matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/, "i"),

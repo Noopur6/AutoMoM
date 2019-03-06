@@ -12,7 +12,7 @@ const auth = jwt({
 })
 
 router.post('/new', [
-    check('id', 'Id is required').exists(),
+    check('id', 'Id is required').exists().not().isEmpty(),
     check('id', 'Invalid id').isMongoId(),
     check('token','token is required').exists()
 ], auth, roomController.createVirtualRoom);
@@ -21,7 +21,7 @@ router.post('/join', [
     check('id', 'Id is required').exists(),
     check('id', 'Invalid id').isMongoId(),
     check('token', 'Token is required').exists(),
-    check('email', 'Email is required').exists(),
+    check('email', 'Email is required').exists().not().isEmpty(),
     check('email', 'Invalid email').isEmail()
 ],auth, roomController.joinVirtualRoom);
 
