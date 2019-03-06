@@ -6,8 +6,8 @@ if (process.env.NODE_ENV === 'production') {
   dbURI = process.env.MONGOLAB_URI;
 }
 mongoose.set('useCreateIndex', true);
-//mongoose.connect('mongodb://admin:admin123@cluster0-shard-00-00-a4m3f.mongodb.net:27017,cluster0-shard-00-01-a4m3f.mongodb.net:27017,cluster0-shard-00-02-a4m3f.mongodb.net:27017/auto_mom?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true', { useNewUrlParser: true });
-mongoose.connect('mongodb://localhost/auto_mom', { useNewUrlParser: true });
+mongoose.connect('mongodb://admin:admin123@cluster0-shard-00-00-a4m3f.mongodb.net:27017,cluster0-shard-00-01-a4m3f.mongodb.net:27017,cluster0-shard-00-02-a4m3f.mongodb.net:27017/auto_mom?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true', { useNewUrlParser: true });
+//mongoose.connect('mongodb://localhost/auto_mom', { useNewUrlParser: true });
 
 
 // CONNECTION EVENTS
