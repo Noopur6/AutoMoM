@@ -34,8 +34,9 @@ module.exports.meetingRequest= (req,res)=> {
                 message: "Meeting has been generated"
             });
             commonUtility.sendMail(meetRequest.participantEmail, meetRequest.organizerEmail,
-                'Automom: Meeting has been scheduled', "Hey,<br><br>You are invited to join the meeting on <b>"+
-                meetRequest.meetingDate+" "+meetRequest.startTime+"</b> by "+meetRequest.organizerEmail+". Please login to AutoMoM to know more. <br><br>Thanks,<br>Team AutoMoM.");
+                'Automom: Meeting has been scheduled', "Hey,<br><br>Your meeting has been scheduled. Please join the meeting.<br>Meeting Title –  "+meetRequest.agenda+"<br>Invited By – "+meetRequest.organizerEmail+
+                +"<br>Date – "+meetRequest.meetingDate+"<br>Start Time – "+meetRequest.startTime+"<br> End Time – "+meetRequest.endTime+"<br>Location – "+meetRequest.location+"<br><br>Thanks,<br>Team AutoMoM.");
+    
         }
     });
 }
@@ -111,13 +112,15 @@ module.exports.updateMeeting = function(req,res) {
             //send email to organiser and participant
             if(operation === "cancel"){
                 commonUtility.sendMail(meeting.participantEmail, meeting.organizerEmail,
-                    'Automom: Meeting has been cancelled', "Hey,<br><br>The meeting on <b>"+
-                    meeting.meetingDate+" "+meeting.startTime+"</b> by "+meeting.organizerEmail+" has been cancelled. Please login to AutoMoM to know more. <br><br>Thanks,<br>Team AutoMoM.");
+                    'Automom: Meeting has been cancelled', "Hey,<br><br>Your meeting has been cancelled.<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "+meeting.organizerEmail+
+                    +"<br>Date – "+meeting.meetingDate+"<br>Start Time – "+meeting.startTime+"<br> End Time – "+meeting.endTime+"<br>Location – "+meeting.location+"<br><br>Thanks,<br>Team AutoMoM.");
+                    
             }
             else {
                 commonUtility.sendMail(meeting.participantEmail, meeting.organizerEmail,
-                    'Automom: Meeting has been updated', "Hey,<br><br>You are invited to join the meeting on <b>"+
-                    meeting.meetingDate+" "+meeting.startTime+"</b> by "+meeting.organizerEmail+". Please login to AutoMoM to know more. <br><br>Thanks,<br>Team AutoMoM.");
+                    'Automom: Meeting has been re-scheduled', "Hey,<br><br>Your meeting has been re-scheduled. Please join the meeting.<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "+meeting.organizerEmail+
+                    +"<br>Date – "+meeting.meetingDate+"<br>Start Time – "+meeting.startTime+"<br> End Time – "+meeting.endTime+"<br>Location – "+meeting.location+"<br><br>Thanks,<br>Team AutoMoM.");
+                
             }
         }        
     })
