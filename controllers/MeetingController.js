@@ -54,9 +54,8 @@ module.exports.meetingList= (req,res)=> {
             {organizerEmail: email},
             {participantEmail: {$elemMatch:{$eq: email}}}
         ]},{ "_id": 1, "organizerEmail": 1, "participantEmail":1, "meetingDate":1, "startTime":1,
-         "endTime":1, "location":1, "agenda":1, "status":1, "conversation":1}, function(err, meetings) {
+         "endTime":1, "location":1, "agenda":1, "status":1, "token":1,"conversation":1}, function(err, meetings) {
         if (err){
-            console.log(err);
             res.send({
                 error: [
                     {
@@ -98,7 +97,6 @@ module.exports.updateMeeting = function(req,res) {
 
     MeetingRequest.findOneAndUpdate({_id: {$eq: req.body.id}},query,{ returnNewDocument: true },function(err, meeting){
         if (err) {
-            console.log(err);
             res.send({
                 error: [
                     {
