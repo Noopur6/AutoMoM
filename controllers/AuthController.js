@@ -24,12 +24,20 @@ module.exports.register = (req, res) => {
         if (err){
             if (err.code == 11000){
                 res.send({
-                    error: "User already exists"
+                    error: [
+                        {
+                            msg: "User already exists"
+                        }
+                    ]
                 });
             }
             else{
                 res.send({
-                    error: "Some error occured"
+                    error: [
+                        {
+                            msg: "Some error occured"
+                        }
+                    ]
                 });
             }
         }

@@ -18,6 +18,7 @@ router.post('/', [
     check('participantEmail', 'Participant email must be an array').isArray(),
     check('startTime', 'Start Time is required').exists(),
     check('meetingDate', 'Meeting date is required').exists(),
+    check('meetingDate', 'Meeting date should be YYYY-MM-DD format').matches(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/),
     check('endTime', 'End time is required').exists(),
     check('location', 'Location is required').exists(),
     check('agenda', 'Agenda is required').exists(),
