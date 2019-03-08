@@ -12,10 +12,16 @@ module.exports.createVirtualRoom = (req,res) => {
     MeetingRequest.findOneAndUpdate({_id:req.body.id},{$set:{token:tokenFromClient}},{ returnNewDocument: true },
         function (err, meeting) {
             if(err){
-                res.send({error:"No meeting found by this Id"});
+                res.send({
+                    error: [
+                        {
+                            msg: "No meeting found by this Id."
+                        }
+                    ]
+                });
             }
             else{
-                res.send({message:"success"});
+                res.send({message:"Success"});
                 //send email to organiser and participant
                 commonUtility.sendMail( [meeting.participantEmail, meeting.organizerEmail], null,
                     'Automom: Token for the meeting', "Hey,<br><br>Please login to AutoMoM and enter below token to join the meeting. "+
@@ -43,12 +49,20 @@ module.exports.joinVirtualRoom = (req, res) => {
         if (err){
             console.log(err);
             res.send({
-                message: "Some Error occurred"
+                error: [
+                    {
+                        msg: "Some error occured"
+                    }
+                ]
             });
         }
         else if(meeting == null){
             res.send({
-                message: "No meetings found"
+                error: [
+                    {
+                        msg: "No meeting found."
+                    }
+                ]
             });
         }
         else {
