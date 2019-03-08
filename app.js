@@ -34,7 +34,6 @@ app.use('/api', authRoute);
 app.use('/profiles', profileRoute);
 app.use('/meeting',meetingRoute);
 app.use('/virtualRoom', roomRoute);
-app.use('/meeting', meetingRoute)
 
 //catch unauthorised acces
 app.use((err, req, res, next) => {

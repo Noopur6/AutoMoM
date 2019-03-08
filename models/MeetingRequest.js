@@ -37,8 +37,8 @@ let meetingRequestSchema = new mongoose.Schema({
     token: {
         type: String
     },
-    meetingData: {
-        type: String
+    conversation: {
+        type: [{sender: String, message: String, timestamp: Date}]
     }
 });
 
