@@ -3,7 +3,7 @@ var MeetingRequest = require('../models/MeetingRequest');
 var messageDictionary = {};
 
 initSocket = (httpObj) => {
-    const io = require('socket.io')(httpObj);console.log("after io");
+    const io = require('socket.io')(httpObj);
     io.sockets
     .on('connection', socketioJwt.authorize({
         secret: 'MY_SECRET',
@@ -36,5 +36,9 @@ function dbBatchInsert() {
         messageDictionary[i] = [];
 	}
 }
-var insertInDb = setInterval(dbBatchInsert, 1000);
+var insertInDb = function(){
+    if(messageDictionary.entries().length!=0){
+        setInterval(dbBatchInsert, 1000);
+    }
+}
 module.exports = initSocket;

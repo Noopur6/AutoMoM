@@ -29,10 +29,15 @@ router.post('/list', [
     check('email', "Invalid Email").isEmail()
 ], auth, meetingController.meetingList);
 
-router.put(['/:operation'], [
+router.put('/:operation', [
     check('operation', 'Invalid operation').isIn(['cancel','update']),
     check('id', 'Id is required').exists(),
     check('id', 'Invalid id').isMongoId()
 ], auth, meetingController.updateMeeting);
+
+router.post('/end',[
+    check('id', 'Id is required').exists(),
+    check('id', 'Invalid id').isMongoId()
+], auth, meetingController.endMeeting);
 
 module.exports = router;
