@@ -17,12 +17,26 @@ initSocket = (httpObj) => {
             delete message.id;
             if(messageDictionary.hasOwnProperty(meetingId)){
                 messageDictionary[meetingId].push(message);
+                if (messageDictionary[meetingId].length === 5){
+                    dbBatchInsertSingle(meetingId, messageDictionary[meetingId]);
+                }
             } else {
                 messageDictionary[meetingId] = [message];
             }
             io.emit('chat message', msg);
         });
     });
+}
+
+function dbBatchInsertSingle(id, msgArray) {
+    console.log('Inserting...');
+    MeetingRequest.findOneAndUpdate({ _id: id},{ $push: { conversation: {$each : msgArray} } }, 
+        function(err){
+            if(err){
+                console.log(err);
+            }
+    });
+    messageDictionary[id] = [];
 }
 
 function dbBatchInsert() {
@@ -36,9 +50,5 @@ function dbBatchInsert() {
         messageDictionary[i] = [];
 	}
 }
-var insertInDb = function(){
-    if(messageDictionary.entries().length!=0){
-        setInterval(dbBatchInsert, 1000);
-    }
-}
+//var insertInDb = setInterval(dbBatchInsert, 1000);
 module.exports = initSocket;
