@@ -4,6 +4,7 @@ var messageDictionary = {};
 
 initSocket = (httpObj) => {
     const io = require('socket.io')(httpObj);
+    io.origins('*:*');
     io.sockets
     .on('connection', socketioJwt.authorize({
         secret: 'MY_SECRET',
