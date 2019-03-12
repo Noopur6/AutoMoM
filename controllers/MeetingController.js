@@ -92,14 +92,16 @@ module.exports.updateMeeting = function(req,res) {
         return res.send({error: errors.array({ onlyFirstError: true })});
     }
     let operation = req.params.operation;
+
     let query;
     if (operation === "cancel"){
         query = {$set:{'status' : 'n'}};
-    } else if(operation === "update"){
-        query = req.body;console.log(req.body);
+    } 
+    else if(operation === "update"){
+        query = req.body;
     }
 
-    MeetingRequest.findOneAndUpdate({_id: {$eq: req.body.id}},query,{ returnNewDocument: true },function(err, meeting){
+    MeetingRequest.findOneAndUpdate({$and: [{_id: {$eq: req.body.id}}, {status: 'y'}]},query,{ returnNewDocument: true },function(err, meeting){
         if (err) {
             res.send({
                 error: [
@@ -113,7 +115,7 @@ module.exports.updateMeeting = function(req,res) {
             res.send({
                 error: [
                     {
-                        msg: "No meetings found by this ID"
+                        msg: "No active meetings found by this ID"
                     }
                 ]
             })
