@@ -7,7 +7,7 @@ const meetingRoute=require('./routes/MeetingRoute');
 const roomRoute=require('./routes/VirtualRoomRoute');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
-const initSocket = require('./config/socket_config');
+const socketConfig = require('./config/socket_config');
 
 require('./models/db');
 require('./config/passport')
@@ -15,7 +15,7 @@ const app = express();
 
 //socket.io websocket integration with app
 const http = require('http').Server(app);
-initSocket(http);
+socketConfig.initSocket(http);
 
 //use cors middleware
 app.use(cors());

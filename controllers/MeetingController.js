@@ -1,7 +1,7 @@
 var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
 var commonUtility = require('../utility/CommonUtility');
-var socketConfig = require('../config/socket_config');
+const socketConfig = require('../config/socket_config');
 
 module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
@@ -104,10 +104,19 @@ module.exports.updateMeeting = function(req,res) {
             res.send({
                 error: [
                     {
-                        msg: "No meeting found by this Id."
+                        msg: err
                     }
                 ]
             });
+        }
+        else if (meeting == null){
+            res.send({
+                error: [
+                    {
+                        msg: "No meetings found by this ID"
+                    }
+                ]
+            })
         }
         else{
             res.send({message: 'Success'});
@@ -134,17 +143,28 @@ module.exports.updateMeeting = function(req,res) {
     })
 }
 
-module.exports.endMeeting = function(req, res) {
-    const errors = validationResult(req);
-    let flag = errors.isEmpty();
-    if(!flag){
-        return res.send({error: errors.array({onlyFirstError: true})});
-    }
-    MeetingRequest.findOneAndUpdate({_id: req.body.id}, {$set : {"status":'e'}}, function(err, meeting){
+triggerMail = (id, res) => {
+    MeetingRequest.findOneAndUpdate({_id: id}, {$set : {"status":'e'}}, function(err, meeting){
         if(err) {
             console.log(err);
-            res.send({error:err});
-        } else {
+            res.send({
+                error: [
+                    {
+                        msg: err
+                    }
+                ]
+            })
+        }  
+        else if (meeting == null){
+            res.send({
+                error: [
+                    {
+                        msg: "No meetings found by this ID"
+                    }
+                ]
+            })
+        }
+        else {
             //let formattedDateTime = meetRequest.dateTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
             let content = "";
             meeting.conversation.sort(function(a, b){return a.timestamp - b.timestamp});
@@ -156,7 +176,24 @@ module.exports.endMeeting = function(req, res) {
             "Hi all,<br><br>Meeting Details:<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "
             +meeting.organizerEmail+"<br>Date – "+meeting.meetingDate+"<br>Start Time – "+meeting.startTime+
             ".<br>Below is the minutes of meeting:<br><br>"+content+"<br><br>Thanks,<br>Team AutoMoM.");
-            res.send({"message":"success"});
+            res.send({"message":"Success"})
         }
     });
+}
+
+async function flushData (id, res){
+    //flush all remaining messages in the queue to database
+    await socketConfig.flushMessagesToDb(id,triggerMail);
+    await triggerMail(id, res);
+}
+
+module.exports.endMeeting = function(req, res) {
+    const errors = validationResult(req);
+    let flag = errors.isEmpty();
+    if(!flag){
+        return res.send({error: errors.array({onlyFirstError: true})});
+    }
+
+    flushData(req.body.id, res);
+    
 }

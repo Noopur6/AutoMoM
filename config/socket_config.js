@@ -2,7 +2,7 @@ const socketioJwt = require('socketio-jwt');
 var MeetingRequest = require('../models/MeetingRequest');
 var messageDictionary = {};
 
-initSocket = (httpObj) => {
+module.exports.initSocket = (httpObj) => {
     const io = require('socket.io')(httpObj);
     io.origins('*:*');
     io.sockets
@@ -40,6 +40,19 @@ function dbBatchInsertSingle(id, msgArray) {
     messageDictionary[id] = [];
 }
 
+module.exports.flushMessagesToDb = (id) => {
+    if(messageDictionary[id] != undefined){
+        MeetingRequest.findOneAndUpdate({ _id: id},{ $push: { conversation: {$each : messageDictionary[id]} } }, 
+            function(err){
+                if(err){
+                    console.log(err);
+                }
+            }
+        );
+    }
+    messageDictionary[id] = [];
+}
+
 function dbBatchInsert() {
     for (var i in messageDictionary){
 		MeetingRequest.findOneAndUpdate({ _id: i},{ $push: { conversation: {$each : messageDictionary[i]} } }, 
@@ -52,4 +65,4 @@ function dbBatchInsert() {
 	}
 }
 //var insertInDb = setInterval(dbBatchInsert, 1000);
-module.exports = initSocket;
+//module.exports = initSocket;
