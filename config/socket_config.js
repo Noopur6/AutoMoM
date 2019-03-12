@@ -29,6 +29,7 @@ module.exports.initSocket = (httpObj) => {
     });
 }
 
+//this function pushes messages into the db after every 5 messages recieved from the clients
 function dbBatchInsertSingle(id, msgArray) {
     console.log('Inserting...');
     MeetingRequest.findOneAndUpdate({ _id: id},{ $push: { conversation: {$each : msgArray} } }, 
@@ -40,6 +41,7 @@ function dbBatchInsertSingle(id, msgArray) {
     messageDictionary[id] = [];
 }
 
+//flushes all remaining messages to db when meeting has been ended.
 module.exports.flushMessagesToDb = (id) => {
     if(messageDictionary[id] != undefined){
         MeetingRequest.findOneAndUpdate({ _id: id},{ $push: { conversation: {$each : messageDictionary[id]} } }, 

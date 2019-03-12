@@ -143,8 +143,8 @@ module.exports.updateMeeting = function(req,res) {
     })
 }
 
-triggerMail = (id, res) => {
-    MeetingRequest.findOneAndUpdate({_id: id}, {$set : {"status":'e'}}, function(err, meeting){
+updateStatusAndTriggerMail = (id, res) => {
+    MeetingRequest.findOneAndUpdate({$and:[{_id: id}, {status: 'y'}]}, {$set : {"status":'e'}}, function(err, meeting){
         if(err) {
             console.log(err);
             res.send({
@@ -159,7 +159,7 @@ triggerMail = (id, res) => {
             res.send({
                 error: [
                     {
-                        msg: "No meetings found by this ID"
+                        msg: "No active meetings found by this ID"
                     }
                 ]
             })
@@ -183,8 +183,8 @@ triggerMail = (id, res) => {
 
 async function flushData (id, res){
     //flush all remaining messages in the queue to database
-    await socketConfig.flushMessagesToDb(id,triggerMail);
-    await triggerMail(id, res);
+    await socketConfig.flushMessagesToDb(id);
+    await updateStatusAndTriggerMail(id, res);
 }
 
 module.exports.endMeeting = function(req, res) {
