@@ -73,7 +73,11 @@ module.exports.login = (req, res) => {
             token = user.generateJwt();
             res.status(200);
             res.send({
-                token: token
+                token: token,
+                user: {
+                    firstName: user.firstName,
+                    lastName: user.lastName
+                }
             })
         }
         else{
