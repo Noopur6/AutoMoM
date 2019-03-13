@@ -10,7 +10,7 @@ module.exports.register = (req, res) => {
     let flag = errors.isEmpty();
     
     if (!flag) {
-        return res.send({error: errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
 
     let user = new User();
@@ -24,6 +24,7 @@ module.exports.register = (req, res) => {
         if (err){
             if (err.code == 11000){
                 res.send({
+                    status:"E",
                     error: [
                         {
                             msg: "User already exists"
@@ -33,6 +34,7 @@ module.exports.register = (req, res) => {
             }
             else{
                 res.send({
+                    status:"E",
                     error: [
                         {
                             msg: "Some error occured"
@@ -45,6 +47,8 @@ module.exports.register = (req, res) => {
             let token;
             token = user.generateJwt();
             res.send({
+                status:"C",
+                message:"Success",
                 token: token
             });
         }
@@ -57,7 +61,7 @@ module.exports.login = (req, res) => {
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
-        return res.send({error: errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
 
     passport.authenticate('local', function(err, user, info) {
@@ -73,6 +77,7 @@ module.exports.login = (req, res) => {
             token = user.generateJwt();
             res.status(200);
             res.send({
+                status:"C",
                 token: token,
                 user: {
                     firstName: user.firstName,

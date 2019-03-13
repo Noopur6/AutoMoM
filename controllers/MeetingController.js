@@ -7,7 +7,7 @@ module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
     let flag=errors.isEmpty();
     if(!flag){
-        return res.send({error: errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
     let meetRequest = new MeetingRequest();
     meetRequest.organizerEmail = req.body.organizerEmail;
@@ -23,6 +23,7 @@ module.exports.meetingRequest= (req,res)=> {
         if (err){
             console.log(err);
             res.send({
+                status: 'E',
                 error: [
                     {
                         msg: "Error"
@@ -32,6 +33,7 @@ module.exports.meetingRequest= (req,res)=> {
         }
         else {
             res.send({
+                status:'C',
                 message: "Meeting has been generated"
             });
             commonUtility.sendMail(meetRequest.participantEmail, meetRequest.organizerEmail,
@@ -50,7 +52,7 @@ module.exports.meetingList= (req,res)=> {
     const errors = validationResult(req);
     let flag = errors.isEmpty();
     if(!flag){
-        return res.send({error: errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
     let email = req.body.email;
     MeetingRequest.find({
@@ -61,6 +63,7 @@ module.exports.meetingList= (req,res)=> {
          "endTime":1, "location":1, "agenda":1, "status":1, "token":1,"conversation":1}, function(err, meetings) {
         if (err){
             res.send({
+                status:'E',
                 error: [
                     {
                         msg: "Some error occured."
@@ -70,6 +73,7 @@ module.exports.meetingList= (req,res)=> {
         }
         else if(meetings.length==0){
             res.send({
+                status:'E',
                 error: [
                     {
                         msg: "There are no meetings for this user."
@@ -78,7 +82,10 @@ module.exports.meetingList= (req,res)=> {
             });
         }
         else {
-            res.send(meetings);
+            res.send({
+                status:"C",
+                meetings:meetings
+            });
         }
     });
 }
@@ -89,7 +96,7 @@ module.exports.updateMeeting = function(req,res) {
     const errors = validationResult(req);
     let flag = errors.isEmpty();
     if(!flag){
-        return res.send({error: errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
     let operation = req.params.operation;
 
@@ -104,6 +111,7 @@ module.exports.updateMeeting = function(req,res) {
     MeetingRequest.findOneAndUpdate({$and: [{_id: {$eq: req.body.id}}, {status: 'y'}]},query,{ returnNewDocument: true },function(err, meeting){
         if (err) {
             res.send({
+                status:"E",
                 error: [
                     {
                         msg: err
@@ -113,15 +121,19 @@ module.exports.updateMeeting = function(req,res) {
         }
         else if (meeting == null){
             res.send({
+                status:"E",
                 error: [
                     {
                         msg: "No active meetings found by this ID"
                     }
                 ]
-            })
+            });
         }
         else{
-            res.send({message: 'Success'});
+            res.send({
+                status:"C",
+                message: 'Success'
+            });
             //send email to organiser and participant
             if(operation === "cancel"){
                 commonUtility.sendMail(meeting.participantEmail, meeting.organizerEmail,
@@ -150,6 +162,7 @@ updateStatusAndTriggerMail = (id, res) => {
         if(err) {
             console.log(err);
             res.send({
+                status:"E",
                 error: [
                     {
                         msg: err
@@ -159,6 +172,7 @@ updateStatusAndTriggerMail = (id, res) => {
         }  
         else if (meeting == null){
             res.send({
+                status:"E",
                 error: [
                     {
                         msg: "No active meetings found by this ID"
@@ -178,7 +192,10 @@ updateStatusAndTriggerMail = (id, res) => {
             "Hi all,<br><br>Meeting Details:<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "
             +meeting.organizerEmail+"<br>Date – "+meeting.meetingDate+"<br>Start Time – "+meeting.startTime+
             ".<br>Below is the minutes of meeting:<br><br>"+content+"<br><br>Thanks,<br>Team AutoMoM.");
-            res.send({"message":"Success"})
+            res.send({
+                status:"C",
+                message:"Success"
+            });
         }
     });
 }
@@ -193,7 +210,7 @@ module.exports.endMeeting = function(req, res) {
     const errors = validationResult(req);
     let flag = errors.isEmpty();
     if(!flag){
-        return res.send({error: errors.array({onlyFirstError: true})});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
 
     flushData(req.body.id, res);

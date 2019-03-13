@@ -12,6 +12,7 @@ passport.use(new LocalStrategy({
             // Return if user not found in database
             if (!user) {
                 return done(null, false, {
+                    status:"E",
                     error: [
                         {
                             msg: 'User not found'
@@ -22,6 +23,7 @@ passport.use(new LocalStrategy({
             // Return if password is wrong
             if (!user.validPassword(password)) {
                 return done(null, false, {
+                    status:"E",
                     error: [
                         {
                             msg: 'Password is wrong'

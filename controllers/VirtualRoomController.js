@@ -6,13 +6,14 @@ module.exports.createVirtualRoom = (req,res) => {
     const errors = validationResult(req);
     let flag = errors.isEmpty();
     if(!flag){
-        return res.send({error:errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
     let tokenFromClient = req.body.token;
     MeetingRequest.findOneAndUpdate({_id:req.body.id},{$set:{token:tokenFromClient}},{ returnNewDocument: true },
         function (err, meeting) {
             if(err){
                 res.send({
+                    status:"E",
                     error: [
                         {
                             msg: "No meeting found by this Id."
@@ -21,7 +22,10 @@ module.exports.createVirtualRoom = (req,res) => {
                 });
             }
             else{
-                res.send({message:"Success"});
+                res.send({
+                    status:"C",
+                    message:"Success"
+                });
                 //send email to organiser and participant
                 commonUtility.sendMail( [meeting.participantEmail, meeting.organizerEmail], null,
                     'Automom: Token for the meeting', "Hey,<br><br>Please login to AutoMoM and enter below token to join the meeting. "+
@@ -35,7 +39,7 @@ module.exports.joinVirtualRoom = (req, res) => {
     const errors = validationResult(req);
     let flag = errors.isEmpty();
     if(!flag){
-        return res.send({error:errors.array({ onlyFirstError: true })});
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
     let id = req.body.id;
     let token = req.body.token;
@@ -49,6 +53,7 @@ module.exports.joinVirtualRoom = (req, res) => {
         if (err){
             console.log(err);
             res.send({
+                status:"E",
                 error: [
                     {
                         msg: "Some error occured"
@@ -58,6 +63,7 @@ module.exports.joinVirtualRoom = (req, res) => {
         }
         else if(meeting == null){
             res.send({
+                status:"E",
                 error: [
                     {
                         msg: "No meeting found."
@@ -67,6 +73,7 @@ module.exports.joinVirtualRoom = (req, res) => {
         }
         else {
             res.send({
+                status:"C",
                 message : "Success"
             });
         }
