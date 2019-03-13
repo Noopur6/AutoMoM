@@ -9,9 +9,19 @@ module.exports.createVirtualRoom = (req,res) => {
         return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
     let tokenFromClient = req.body.token;
-    MeetingRequest.findOneAndUpdate({_id:req.body.id},{$set:{token:tokenFromClient}},{ returnNewDocument: true },
+    MeetingRequest.findOneAndUpdate({$and:[{_id: req.body.id}, {status: 'y'}]},{$set:{token:tokenFromClient}},{ returnNewDocument: true },
         function (err, meeting) {
             if(err){
+                res.send({
+                    status:"E",
+                    error: [
+                        {
+                            msg: err
+                        }
+                    ]
+                });
+            }
+            else if(meeting == null){
                 res.send({
                     status:"E",
                     error: [
