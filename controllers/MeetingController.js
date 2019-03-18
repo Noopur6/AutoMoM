@@ -139,7 +139,7 @@ module.exports.updateMeeting = function(req,res) {
                 commonUtility.sendMail(meeting.participantEmail, meeting.organizerEmail,
                     'Automom: Meeting has been cancelled', 
                     "Hey,<br><br>Your meeting has been cancelled.<br>Meeting Title –  "+meeting.agenda+
-                    "<br>Invited By – "+meeting.organizerEmail+"<br>Date – "+commonUtility.formatDate(meetRequest.meetingDate)+"<br>Start Time – "
+                    "<br>Invited By – "+meeting.organizerEmail+"<br>Date – "+commonUtility.formatDate(meeting.meetingDate)+"<br>Start Time – "
                     +meeting.startTime+"<br> End Time – "+meeting.endTime+"<br>Location – "+meeting.location+
                     "<br><br>Thanks,<br>Team AutoMoM.");
                     
