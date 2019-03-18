@@ -40,4 +40,8 @@ router.post('/end',[
     check('id', 'Invalid id').isMongoId()
 ], auth, meetingController.endMeeting);
 
+router.get('/:meetingId', [
+    check('meetingId','Invalid Id').isMongoId()
+], auth, meetingController.getMeetingById);
+
 module.exports = router;

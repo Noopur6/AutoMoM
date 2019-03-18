@@ -181,7 +181,6 @@ updateStatusAndTriggerMail = (id, res) => {
             })
         }
         else {
-            //let formattedDateTime = meetRequest.dateTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
             let content = "";
             meeting.conversation.sort(function(a, b){return a.timestamp - b.timestamp});
             meeting.conversation.forEach(element => {
@@ -212,7 +211,27 @@ module.exports.endMeeting = function(req, res) {
     if(!flag){
         return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
     }
-
     flushData(req.body.id, res);
-    
+}
+
+module.exports.getMeetingById = function(req,res) {
+    const errors = validationResult(req);
+    let flag = errors.isEmpty();
+    if(!flag){
+        return res.send({status:'E', message: 'Validations failed',error: errors.array({ onlyFirstError: true })});
+    }
+    MeetingRequest.findOne({_id : req.params.meetingId}, function(err, meeting){
+        if(err) {
+            res.send({
+                status:"E",
+                error: [
+                    {
+                        msg: err
+                    }
+                ]
+            });
+        } else {
+            res.send({'meeting data': meeting});
+        }
+    });
 }
