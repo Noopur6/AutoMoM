@@ -16,10 +16,19 @@ router.post('/', [
     check('organizerEmail', 'Invalid email').isEmail(),
     check('participantEmail', 'Participant email is required').exists().not().isEmpty(),
     check('participantEmail', 'Participant email must be an array').isArray(),
-    check('startTime', 'Start Time is required').exists(),
     check('meetingDate', 'Meeting date is required').exists(),
     check('meetingDate', 'Meeting date should be YYYY-MM-DD format').matches(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/),
+    check('meetingDate', 'Invalid Meeting date').custom(val => {
+        if(new Date(val).toLocaleDateString() < new Date().toLocaleDateString()) return false;
+        return true;
+    }),
+    check('startTime', 'Start Time is required').exists(),
+    check('startTime', 'Invalid meeting start time').custom(val => new Date(val) > new Date()),
     check('endTime', 'End time is required').exists(),
+    check('endTime', 'Invalid meeting end time').custom((val, {req}) => {
+        if(new Date(val) <= new Date(req.body.startTime)) return false;
+        return true;
+    }),
     check('location', 'Location is required').exists(),
     check('agenda', 'Agenda is required').exists(),
 ], auth, meetingController.meetingRequest); 

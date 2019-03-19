@@ -18,16 +18,16 @@ module.exports.sendMail = function(toEmail, ccMail, subjectContent, body) {
     });
 }
 
-module.exports.formatDate = (date) => {
-    date = new Date(date);
+// module.exports.formatDate = (date) => {
+//     date = new Date(date);
   
-    const year = date.getFullYear()
-    const month = twoDigit(date.getMonth() + 1)
-    const day = twoDigit(date.getDate())
+//     const year = date.getFullYear()
+//     const month = twoDigit(date.getMonth() + 1)
+//     const day = twoDigit(date.getDate())
   
-    return `${day}-${month}-${year}`
-}
+//     return `${day}-${month}-${year}`
+// }
 
-function twoDigit (n) {
-    return ('0' + n).slice(-2)
-}
+// function twoDigit (n) {
+//     return ('0' + n).slice(-2)
+// }

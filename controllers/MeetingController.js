@@ -18,7 +18,7 @@ module.exports.meetingRequest= (req,res)=> {
     meetRequest.location = req.body.location;
     meetRequest.agenda = req.body.agenda;
     meetRequest.status="y";
-
+    
     meetRequest.save(function(err) {
         if (err){
             console.log(err);
@@ -39,10 +39,10 @@ module.exports.meetingRequest= (req,res)=> {
             commonUtility.sendMail(meetRequest.participantEmail, meetRequest.organizerEmail,
                 'Automom: Meeting has been scheduled', 
                 "Hey,<br><br>Your meeting has been scheduled. Please join the meeting.<br>Meeting Title –  "
-                +meetRequest.agenda+"<br>Invited By – "+meetRequest.organizerEmail+"<br>Date – "+commonUtility.formatDate(meetRequest.meetingDate)+
-                "<br>Start Time – "+meetRequest.startTime+"<br> End Time – "+meetRequest.endTime+"<br>Location – "
-                +meetRequest.location+"<br><br>Thanks,<br>Team AutoMoM.");
-    
+                +meetRequest.agenda+"<br>Invited By – "+meetRequest.organizerEmail+"<br>Date – "
+                +meetRequest.meetingDate.toLocaleDateString()+"<br>Start Time – "
+                +meetRequest.startTime.toLocaleTimeString()+"<br> End Time – "+meetRequest.endTime.toLocaleTimeString()
+                +"<br>Location – "+meetRequest.location+"<br><br>Thanks,<br>Team AutoMoM.");
         }
     });
 }
@@ -138,19 +138,20 @@ module.exports.updateMeeting = function(req,res) {
             if(operation === "cancel"){
                 commonUtility.sendMail(meeting.participantEmail, meeting.organizerEmail,
                     'Automom: Meeting has been cancelled', 
-                    "Hey,<br><br>Your meeting has been cancelled.<br>Meeting Title –  "+meeting.agenda+
-                    "<br>Invited By – "+meeting.organizerEmail+"<br>Date – "+commonUtility.formatDate(meeting.meetingDate)+"<br>Start Time – "
-                    +meeting.startTime+"<br> End Time – "+meeting.endTime+"<br>Location – "+meeting.location+
-                    "<br><br>Thanks,<br>Team AutoMoM.");
+                    "Hey,<br><br>Your meeting has been cancelled.<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "
+                    +meeting.organizerEmail+"<br>Date – "+meeting.meetingDate.toLocaleDateString()+"<br>Start Time – "
+                    +meeting.startTime.toLocaleTimeString()+"<br> End Time – "+meeting.endTime.toLocaleTimeString()
+                    +"<br>Location – "+meeting.location+"<br><br>Thanks,<br>Team AutoMoM.");
                     
             }
             else {
                 commonUtility.sendMail(meeting.participantEmail, meeting.organizerEmail,
                     'Automom: Meeting has been re-scheduled', 
                     "Hey,<br><br>Your meeting has been re-scheduled. Please join the meeting.<br>Meeting Title –  "
-                    +meeting.agenda+"<br>Invited By – "+meeting.organizerEmail+"<br>Date – "+commonUtility.formatDate(meeting.meetingDate)+
-                    "<br>Start Time – "+meeting.startTime+"<br> End Time – "+meeting.endTime+"<br>Location – "
-                    +meeting.location+"<br><br>Thanks,<br>Team AutoMoM.");
+                    +meeting.agenda+"<br>Invited By – "+meeting.organizerEmail+"<br>Date – "
+                    +meeting.meetingDate.toLocaleDateString()+"<br>Start Time – "+meeting.startTime.toLocaleTimeString()
+                    +"<br> End Time – "+meeting.endTime.toLocaleTimeString()+"<br>Location – "+meeting.location
+                    +"<br><br>Thanks,<br>Team AutoMoM.");
                 
             }
         }        
@@ -189,8 +190,9 @@ updateStatusAndTriggerMail = (id, res) => {
             });
             commonUtility.sendMail([meeting.participantEmail,meeting.organizerEmail], null, "Minutes of Meeting(MOM)",
             "Hi all,<br><br>Meeting Details:<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "
-            +meeting.organizerEmail+"<br>Date – "+commonUtility.formatDate(meeting.meetingDate)+"<br>Start Time – "+meeting.startTime+
-            ".<br>Below is the minutes of meeting:<br><br>"+content+"<br><br>Thanks,<br>Team AutoMoM.");
+            +meeting.organizerEmail+"<br>Date – "+meeting.meetingDate.toLocaleDateString()+"<br>Start Time – "
+            +meeting.startTime.toLocaleTimeString()+".<br>Below is the minutes of meeting:<br><br>"+content
+            +"<br><br>Thanks,<br>Team AutoMoM.");
             res.send({
                 status:"C",
                 message:"Success"
