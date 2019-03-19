@@ -5,6 +5,7 @@ const authRoute = require('./routes/AuthRoute');
 const profileRoute = require('./routes/profilesRoute');
 const meetingRoute=require('./routes/MeetingRoute');
 const roomRoute=require('./routes/VirtualRoomRoute');
+const passwordRoute=require('./routes/PasswordRoute');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
 const socketConfig = require('./config/socket_config');
@@ -34,6 +35,7 @@ app.use('/api', authRoute);
 app.use('/profiles', profileRoute);
 app.use('/meeting',meetingRoute);
 app.use('/virtualRoom', roomRoute);
+app.use('/password', passwordRoute);
 
 //catch unauthorised acces
 app.use((err, req, res, next) => {
