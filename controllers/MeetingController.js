@@ -188,7 +188,7 @@ updateStatusAndTriggerMail = (id, res) => {
                 content+= "["+element.timestamp.toISOString().replace(/T/, ' ').replace(/\..+/, '')+"] "
                 +element.sender+" : "+element.message+".<br>";
             });
-            commonUtility.sendMail([meeting.participantEmail,meeting.organizerEmail], null, "Minutes of Meeting(MOM)",
+            commonUtility.sendMail([meeting.organizerEmail], null, "Minutes of Meeting(MOM)",
             "Hi all,<br><br>Meeting Details:<br>Meeting Title –  "+meeting.agenda+"<br>Invited By – "
             +meeting.organizerEmail+"<br>Date – "+meeting.meetingDate.toLocaleDateString()+"<br>Start Time – "
             +meeting.startTime.toLocaleTimeString()+".<br>Below is the minutes of meeting:<br><br>"+content
