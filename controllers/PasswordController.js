@@ -2,7 +2,8 @@ const User = require('../models/User');
 const { validationResult } = require('express-validator/check');
 const path = require('path');
 const commonUtils = require('../utility/CommonUtility');
-const emailTemplate = require('../email-templates/forget-pass');
+const forgotemailTemplate = require('../email-templates/forget-pass');
+const changeemailTemplate = require('../email-templates/change-pass');
 const crypto = require('crypto');
 const key = crypto.randomBytes(32);
 
@@ -57,6 +58,9 @@ module.exports.reset = (req, res) => {
                         status:"C",
                         message:"Success"
                     });
+                    //send mail
+                    commonUtils.sendMail(req.body.email, null, 'AutoMoM: Password changed', 
+                    changeemailTemplate.bringThatChangePasswordTemplate(req.body.email));
                 }
             });
         }
@@ -101,6 +105,9 @@ module.exports.change = (req, res) => {
                         status:"C",
                         message:"Success"
                     });
+                    //send mail
+                    commonUtils.sendMail(req.body.email, null, 'AutoMoM: Password changed', 
+                    changeemailTemplate.bringThatChangePasswordTemplate(req.body.email));
                 }
             });
         }
@@ -143,7 +150,7 @@ module.exports.forgot = (req, res) => {
 
             //send mail
             commonUtils.sendMail(req.body.email, null, 'AutoMoM: Reset Password', 
-            emailTemplate.bringThatForgotPasswordTemplate(url, req.body.email));
+            forgotemailTemplate.bringThatForgotPasswordTemplate(url, req.body.email));
         }
     }); 
 }
