@@ -2,7 +2,6 @@ var MeetingRequest = require('../models/MeetingRequest');
 const { validationResult } = require('express-validator/check');
 var commonUtility = require('../utility/CommonUtility');
 const socketConfig = require('../config/socket_config');
-var SummaryTool = require('node-summary');
 
 module.exports.meetingRequest= (req,res)=> {
     const errors=validationResult(req);
