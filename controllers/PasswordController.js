@@ -7,10 +7,6 @@ const changeemailTemplate = require('../email-templates/change-pass');
 const crypto = require('crypto');
 const key = crypto.randomBytes(32);
 
-// module.exports.reset = (req, res) => {
-//     res.sendFile('resetview.html', { root: path.join(__dirname, '../views') })
-// }
-
 module.exports.reset = (req, res) => {
     const errors=validationResult(req);
     let flag=errors.isEmpty();

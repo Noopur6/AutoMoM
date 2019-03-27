@@ -11,7 +11,7 @@ const auth = jwt({
     userProperty: 'payload'
 })
 
-router.post('/', [
+router.post('/new', [
     check('organizerEmail', 'Organizer Email is required').exists().not().isEmpty(),
     check('organizerEmail', 'Invalid email').isEmail(),
     check('participantEmail', 'Participant email is required').exists().not().isEmpty(),
