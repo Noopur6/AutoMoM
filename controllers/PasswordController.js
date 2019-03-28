@@ -142,7 +142,7 @@ module.exports.forgot = (req, res) => {
             });
 
             //preparing url
-            let url = 'https://automom-dev.herokuapp.com/password/reset/'+encryptedToken;
+            let url = 'http://localhost:4200/forgot-password/'+encryptedToken;
 
             //send mail
             commonUtils.sendMail(req.body.email, null, 'AutoMoM: Reset Password', 
