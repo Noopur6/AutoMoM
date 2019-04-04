@@ -19,7 +19,7 @@ router.post('/new', [
     check('meetingDate', 'Meeting date is required').exists(),
     check('meetingDate', 'Meeting date should be YYYY-MM-DD format').matches(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/),
     check('meetingDate', 'Invalid Meeting date').custom(val => {
-        if(new Date(val).toLocaleDateString() < new Date().toLocaleDateString()) return false;
+        if(new Date(val).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) return false;
         return true;
     }),
     check('startTime', 'Start Time is required').exists(),
