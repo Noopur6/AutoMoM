@@ -143,6 +143,7 @@ module.exports.forgot = (req, res) => {
 
             //preparing url
             let url = 'http://localhost:4200/forgot-password/'+encryptedToken;
+            // let url = 'https://auto-mom.github.io/automom/forgot-password/'+encryptedToken;
 
             //send mail
             commonUtils.sendMail(req.body.email, null, 'AutoMoM: Reset Password', 
